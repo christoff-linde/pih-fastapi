@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  db:
+    container_name: pih-fastapi-db
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=pih-fastapi-db
+      - POSTGRES_USER=pih
+      - POSTGRES_PASSWORD=pih
+    ports:
+      - 5498:5432
+    networks:
+      - pih-fastapi
+  backend:
+    container_name: pih-fastapi-backend
+    build:
+      context: .
+    command: uvicorn app.main:app --reload --host 0.0.0.0
+    volumes:
+      - ./src:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    networks:
+      - pih-fastapi
+
+networks:
+  pih-fastapi:
+    name: pih-fastapi
