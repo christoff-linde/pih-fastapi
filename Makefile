@@ -2,7 +2,7 @@
 default: build
 
 .PHONY: help
-help: : ## Prints help for targets with comments
+help: ## Prints help for targets with comments
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: build
@@ -11,7 +11,7 @@ build: ## Build all containers
 
 .PHONY: up
 up: create-dev-env-file ## Build & start all services
-	docker compose --build -d
+	docker compose up -d
 
 .PHONY: down
 down: create-dev-env-file ## Stop all services
@@ -23,7 +23,7 @@ restart: ## Restart all services
 
 .PHONY: create-dev-env-file
 create-dev-env-file: ## Create a development environment file
-	if [ ! -f .env ]; then cp .env.skel .env; fi 
+	if [ ! -f .env ]; then cp .env.skel .env; fi
 
 .PHONY: wipe
 wipe: down ## Delete all services and data
